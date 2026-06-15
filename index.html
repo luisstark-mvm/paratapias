@@ -2,12 +2,38 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Para Sofia ♥</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para Sofia Tapias♥</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#060008;overflow:hidden;font-family:Georgia,serif;color:#fff;width:100vw;height:100vh;touch-action:none;}
-#c{display:block;width:100%;height:100%;}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#060008;
+}
+
+body{
+    position:fixed;
+    inset:0;
+    font-family:Georgia,serif;
+    color:#fff;
+    touch-action:manipulation;
+}
+
+#c{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    display:block;
+    z-index:0;
+}
 
 #hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:0.75rem;letter-spacing:2px;color:rgba(255,160,200,0.5);pointer-events:none;animation:fadehint 3s ease 3s forwards;}
 @keyframes fadehint{to{opacity:0;}}
@@ -121,7 +147,7 @@ function initThree(){
   camera.lookAt(0,0,0);
 
   renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
   renderer.setSize(W,H);
   renderer.setClearColor(0x060008,1);
 
@@ -256,9 +282,14 @@ function addAmbientStars(){
 }
 
 function onResize(){
-  const W=window.innerWidth,H=window.innerHeight;
-  camera.aspect=W/H;camera.updateProjectionMatrix();
-  renderer.setSize(W,H);
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(W, H, false);
+}
 }
 
 function setupControls(){
@@ -351,13 +382,17 @@ function animate(t){
     h.material.opacity=0.5+0.4*Math.abs(Math.sin(h.userData.phase));
   }
 
-  galaxy.children&&galaxy.children.forEach(c=>{if(c.rotation){c.rotation.x=rotX;c.rotation.y=rotY+t*0.0002;}});
-
   updateOrbitLabels(t);
   renderer.render(scene,camera);
 }
 
 document.getElementById('btn-start').addEventListener('click',()=>{
+
+  if(typeof THREE === "undefined"){
+    alert("Error al cargar la animación");
+    return;
+  }
+
   const s=document.getElementById('screen-start');
   s.style.opacity='0';
   setTimeout(()=>{
