@@ -133,7 +133,7 @@ function initThree(){
 }
 
 function buildGalaxy(){
-  const N=18000;
+  const N=6000;
   const arms=3;
   const positions=new Float32Array(N*3);
   const colors=new Float32Array(N*3);
@@ -242,7 +242,7 @@ function buildHearts(){
 }
 
 function addAmbientStars(){
-  const N=4000;
+  const N=1000;
   const pos=new Float32Array(N*3);
   for(let i=0;i<N;i++){
     pos[i*3]=(Math.random()-0.5)*600;
